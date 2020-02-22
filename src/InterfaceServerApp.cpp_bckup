@@ -1,0 +1,27 @@
+#include "InterfaceServerApp.hpp"
+#include "RequestHandlerFactory.hpp"
+#include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/HTTPServer.h>
+#include <Poco/Net/HTTPRequestHandler.h>
+#include <Poco/Net/HTTPRequestHandlerFactory.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Net/HTTPServerResponse.h>
+
+using namespace Poco::Net;
+
+
+int InterfaceServerApp::main(const vector<string> &)
+{
+HTTPServer s(new RequestHandlerFactory, ServerSocket(9090), new HTTPServerParams);
+
+s.start();
+cout << endl << "Server started" << endl;
+
+waitForTerminationRequest();  // wait for CTRL-C or kill
+
+cout << endl << "Shutting down..." << endl;
+s.stop();
+
+return Application::EXIT_OK;
+}

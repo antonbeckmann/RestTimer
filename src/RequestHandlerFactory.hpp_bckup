@@ -1,0 +1,54 @@
+#include <Poco/Net/HTTPRequestHandler.h>
+#include <Poco/Net/HTTPRequestHandlerFactory.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Util/ServerApplication.h>
+
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Net/HTTPServerResponse.h>
+#include <Poco/Net/IPAddress.h>
+#include <Poco/Util/ServerApplication.h>
+#include <Poco/String.h>
+#include <Poco/Net/HTMLForm.h>
+
+#include <Poco/StringTokenizer.h>
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+
+// take out and try
+//#include "ESPDevInfo.hpp"
+
+using namespace Poco::Net;
+using namespace Poco::Util;
+using namespace std;
+
+
+class RequestHandler : public HTTPRequestHandler
+{
+public:
+  virtual void handleRequest(HTTPServerRequest &req, HTTPServerResponse &resp);
+  
+private:
+  static int count;
+  string getHtmlHeader();
+  string getHtmlStyle();
+  string getHtmlEnd();
+  string getStringFromFile(std::string fileName);
+  std::vector<std::string> getLinesFromFile(std::string fileName);
+  std::vector<std::string> getESPIpsFromFile(std::string fileName);
+  
+};
+
+class RequestHandlerFactory : public HTTPRequestHandlerFactory
+{
+public:
+  virtual HTTPRequestHandler* createRequestHandler(const HTTPServerRequest &)
+  {
+    return new RequestHandler;
+  }
+};
+
